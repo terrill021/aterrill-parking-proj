@@ -1,0 +1,5 @@
+include ":aterrill-repository-proj"
+project(":aterrill-repository-proj").projectDir = file("../aterrill-repository-proj")
+
+include ":aterrill-utilities-proj"
+project(":aterrill-utilities-proj").projectDir = file("../aterrill-utilities-proj")

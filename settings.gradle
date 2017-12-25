@@ -1,0 +1,4 @@
+include "aterrill-parking-bl-proj"
+include "aterrill-repository-proj"
+include "aterrill-parking-restapi-proj"
+include "aterrill-utilities-proj"
