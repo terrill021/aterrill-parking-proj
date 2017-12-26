@@ -1,6 +1,7 @@
 package com.ceiba.bl.parking.models;
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -13,11 +14,11 @@ public class Parking {
 	private int motorcyclesCapacity;
 	private PriceTable priceTable;
 	private List<Bill> bills;
-	private List<Vehicle> cars;
-	private List<Vehicle> motorcycles;
-	
+	private Set<String> motorcyclesPlate;
+	private Set<String> carsPlates;
+
 	public Parking(String id, String name, int carsCapacity, int motorcyclesCapacity, PriceTable priceTable,
-			List<Bill> bills, List<Vehicle> cars, List<Vehicle> motorcycles) {
+			List<Bill> bills, Set<String> motorcyclesPlate, Set<String> carsPlates) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -25,15 +26,29 @@ public class Parking {
 		this.motorcyclesCapacity = motorcyclesCapacity;
 		this.priceTable = priceTable;
 		this.bills = bills;
-		this.cars = cars;
-		this.motorcycles = motorcycles;
+		this.motorcyclesPlate = motorcyclesPlate;
+		this.carsPlates = carsPlates;
 	}
-	
-	
+
+	public Set<String> getMotorcyclesPlate() {
+		return motorcyclesPlate;
+	}
+
+	public void setMotorcyclesPlate(Set<String> motorcyclesPlate) {
+		this.motorcyclesPlate = motorcyclesPlate;
+	}
+
+	public Set<String> getCarsPlates() {
+		return carsPlates;
+	}
+
+	public void setCarsPlates(Set<String> carsPlates) {
+		this.carsPlates = carsPlates;
+	}
+
 	public Parking() {
 		super();
 	}
-
 
 	public List<Bill> getBills() {
 		return bills;
@@ -68,18 +83,7 @@ public class Parking {
 	public void setMotorcyclesCapacity(int motorcyclesCapacity) {
 		this.motorcyclesCapacity = motorcyclesCapacity;
 	}
-	public List<Vehicle> getCars() {
-		return cars;
-	}
-	public void setCars(List<Vehicle> cars) {
-		this.cars = cars;
-	}
-	public List<Vehicle> getMotorcycles() {
-		return motorcycles;
-	}
-	public void setMotorcycles(List<Vehicle> motorcycles) {
-		this.motorcycles = motorcycles;
-	}
+	
 	public String getId() {
 		return id;
 	}

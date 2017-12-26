@@ -43,6 +43,7 @@ public class ApiParking {
 				
 	}
 
+    @CrossOrigin(origins="*")
     @RequestMapping("/parking/{parkingId}/bills/{licensePlate}")
 	public ApiResponse cashParking(@PathVariable(name="parkingId") String parkingId, 
 				@PathVariable(name="licensePlate") String licensePlate) {

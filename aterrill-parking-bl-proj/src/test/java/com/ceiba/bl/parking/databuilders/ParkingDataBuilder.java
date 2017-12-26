@@ -1,7 +1,9 @@
 package com.ceiba.bl.parking.databuilders;
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.ceiba.bl.parking.models.Bill;
 import com.ceiba.bl.parking.models.Parking;
@@ -16,8 +18,8 @@ public class ParkingDataBuilder {
 	private int motorcyclesCapacity;
 	private PriceTable priceTable;
 	private List<Bill> bills;
-	private List<Vehicle> cars;
-	private List<Vehicle> motorcycles;
+	private Set<String> carsPlate;
+	private Set <String> motorcyclesPalte;
 	
 	public ParkingDataBuilder() {
 		this.id = "id_parking";
@@ -26,8 +28,8 @@ public class ParkingDataBuilder {
 		this.motorcyclesCapacity = 10;
 		this.priceTable = new PriceTableDataBuilder().build();
 		bills = new ArrayList<>();
-		cars = new ArrayList<>();
-		motorcycles = new ArrayList<>();
+		carsPlate = new LinkedHashSet<>();
+		motorcyclesPalte = new LinkedHashSet<>();
 	}
 	
 	public String getId() {
@@ -78,24 +80,8 @@ public class ParkingDataBuilder {
 		this.bills = bills;
 	}
 
-	public List<Vehicle> getCars() {
-		return cars;
-	}
-
-	public void setCars(List<Vehicle> cars) {
-		this.cars = cars;
-	}
-
-	public List<Vehicle> getMotorcycles() {
-		return motorcycles;
-	}
-
-	public void setMotorcycles(List<Vehicle> motorcycles) {
-		this.motorcycles = motorcycles;
-	}
-
 	public Parking build() {
-		Parking parking = new Parking(id, name, carsCapacity, motorcyclesCapacity, priceTable, bills, cars, motorcycles);
+		Parking parking = new Parking(id, name, carsCapacity, motorcyclesCapacity, priceTable, bills, carsPlate, this.motorcyclesPalte);
 		return parking;
 	}
 }
