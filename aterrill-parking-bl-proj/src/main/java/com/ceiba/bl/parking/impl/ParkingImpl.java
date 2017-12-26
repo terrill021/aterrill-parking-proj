@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ceiba.bl.parking.IParking;
-import com.ceiba.bl.parking.databuilders.ParkingDataBuilder;
 import com.ceiba.bl.parking.models.Bill;
 import com.ceiba.bl.parking.models.Parking;
 import com.ceiba.bl.parking.models.Vehicle;

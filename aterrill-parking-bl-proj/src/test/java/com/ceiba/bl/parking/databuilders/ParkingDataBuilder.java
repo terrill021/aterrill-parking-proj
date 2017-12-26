@@ -8,7 +8,6 @@ import java.util.Set;
 import com.ceiba.bl.parking.models.Bill;
 import com.ceiba.bl.parking.models.Parking;
 import com.ceiba.bl.parking.models.PriceTable;
-import com.ceiba.bl.parking.models.Vehicle;
 
 public class ParkingDataBuilder {
 
