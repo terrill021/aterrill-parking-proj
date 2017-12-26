@@ -57,6 +57,7 @@ public class MongoDbTest {
 	  // act
 	  mongoDb.save(null);
 	  //assert		  
+	  Assert.fail();
 	}
   
   

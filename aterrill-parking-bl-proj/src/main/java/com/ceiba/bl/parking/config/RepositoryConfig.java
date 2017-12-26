@@ -23,8 +23,7 @@ public class RepositoryConfig extends MongoDbConnection{
 		return new MongoDb();
 	}
 	
-    public String readProperty(String propertyName) {
-        
+    public String readProperty(String propertyName) {        
     	return env.getProperty(propertyName);
     }
     

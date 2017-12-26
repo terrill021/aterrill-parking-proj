@@ -1,17 +1,14 @@
 package com.ceiba.repository.dbnosql.impl;
 
-import static org.junit.Assert.*;
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
+
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.gridfs.GridFsOperations;
 
 import com.ceiba.repository.dbnosql.model.Tester;
+import com.ceiba.repository.nosqldb.IDbNoSql;
 import com.ceiba.repository.nosqldb.config.MongoDbConnection;
 import com.ceiba.repository.nosqldb.impl.MongoDb;
 import com.ceiba.repository.nosqldb.model.DataSourceNoSql;
@@ -33,7 +30,6 @@ public class MongoDbTestIntegration {
 	@Before
 	public void sepUp() throws Exception {
 		mongoDbConnection = new MongoDbConnection() {
-
 			@Override
 			public DataSourceNoSql getDataSourceNoSql() {
 				// TODO Auto-generated method stub
@@ -41,8 +37,13 @@ public class MongoDbTestIntegration {
 				dataSourceNoSql.setDataBase("test-mongo");
 				dataSourceNoSql.setHost("127.0.0.1");
 				dataSourceNoSql.setPort(27017);
-
 				return dataSourceNoSql;
+			}
+
+			@Override
+			public IDbNoSql iDbNoSql() {
+				// TODO Auto-generated method stub
+				return null;
 			}
 		};
 
@@ -55,7 +56,6 @@ public class MongoDbTestIntegration {
 	@Test
 	public void saveTest() throws Exception {
 		// arrange
-
 		// act
 		Boolean res = mongoDb.save(tester);
 		// assert
@@ -65,10 +65,10 @@ public class MongoDbTestIntegration {
 	@Test(expected = Exception.class)
 	public void saveFailTest() throws Exception {
 		// arrange
-
 		// act
 		mongoDb.save(null);
 		// assert
+		Assert.fail();
 	}
 
 }

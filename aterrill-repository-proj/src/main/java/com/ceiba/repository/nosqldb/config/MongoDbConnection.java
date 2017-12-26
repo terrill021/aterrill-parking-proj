@@ -12,6 +12,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.SimpleMongoDbFactory;
 import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 
+import com.ceiba.repository.nosqldb.IDbNoSql;
 import com.ceiba.repository.nosqldb.model.DataSourceNoSql;
 import com.mongodb.Mongo;
 import com.mongodb.MongoClient;
@@ -22,7 +23,8 @@ public abstract class MongoDbConnection extends AbstractMongoConfiguration {
   
   private final String DEFAULT_MONGO_DATABASE = "admin";
   
-
+  public abstract IDbNoSql iDbNoSql();
+  
   public abstract DataSourceNoSql getDataSourceNoSql();
 
   @Override
