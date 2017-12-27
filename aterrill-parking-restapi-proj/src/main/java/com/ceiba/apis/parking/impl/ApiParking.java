@@ -1,10 +1,13 @@
 package com.ceiba.apis.parking.impl;
 
+import javax.security.auth.message.callback.PrivateKeyCallback.Request;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ceiba.apis.parking.model.ApiResponse;
@@ -54,7 +57,7 @@ public class ApiParking {
 		try {
 			apiResponse.setPayload(parkingImpl.charge(parkingId, licensePlate));
 			apiResponse.setError(Boolean.FALSE);
-			apiResponse.setMessage("okokokok");
+			apiResponse.setMessage("Correct.");
 			return apiResponse;
 		} catch (Exception e) {
 			
@@ -65,6 +68,25 @@ public class ApiParking {
 		}
 	}
     
+    @CrossOrigin(origins="*")
+    @RequestMapping(path="/parking/{parkingId}/vehicles", method= RequestMethod.GET)
+	public ApiResponse searchVehiclesByParking(@PathVariable(name="parkingId") String parkingId) {
+		
+		ApiResponse apiResponse = new ApiResponse();
+		
+		try {
+			apiResponse.setPayload(parkingImpl.searchVehicles(parkingId));
+			apiResponse.setError(Boolean.FALSE);
+			apiResponse.setMessage("");
+			return apiResponse;
+		} catch (Exception e) {
+			
+			apiResponse.setError(Boolean.TRUE);
+			e.printStackTrace();
+			apiResponse.setMessage("Exception: " + e.getMessage() +  e.getCause());
+			return apiResponse;
+		}
+	}
     @CrossOrigin(origins="*")
     @RequestMapping("/parking")
     public ApiResponse registerParking(@RequestBody Parking parking) {

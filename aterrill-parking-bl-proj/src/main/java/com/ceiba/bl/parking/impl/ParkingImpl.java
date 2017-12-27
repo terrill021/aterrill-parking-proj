@@ -4,6 +4,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -92,6 +93,12 @@ public class ParkingImpl implements IParking{
 		return parking;
 	}
 	
+
+	@Override
+	public Set<String> searchVehicles (String parkingId) throws Exception {
+		Parking parking = searchParking(parkingId);
+		return parking.getVehicles();
+	}
 	private Parking searchParking(String parkingId) throws Exception {
 		Parking parking = iDbNoSql.findOne(parkingId, Parking.class);
 		
