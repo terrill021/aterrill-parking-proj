@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.MockingDetails;
@@ -60,6 +61,27 @@ public class ParkingImplTest {
 		
 		// assert
 		assertNotNull(bill);		
+	}
+	
+	@Test
+	public void testRegisterVehicleAlreadyExist() throws Exception {
+		
+		// Arrange
+		vehicle = new Vehicle("321", "bcd-123", "CAR", 80f);
+
+		Mockito.when(iDbNoSql.save(bill)).thenReturn(true);
+		Mockito.when(iDbNoSql.findOne(parking.getId(), Parking.class)).thenReturn(parking);
+		Mockito.when(iDateUtilities.getDayOfWeek()).thenReturn(Calendar.WEDNESDAY);
+		Mockito.when(iDateUtilities.getDateStamp()).thenReturn(Calendar.getInstance().getTime());
+		
+		// act
+		Bill bill = ParkingImpl.registerVehicle(parking.getId(), vehicle);
+		try {
+			ParkingImpl.registerVehicle(parking.getId(), vehicle);
+		} catch (Exception e) {
+			//assert
+			assertEquals("There is already an vehicle whit this license plate", e.getMessage());
+		}	
 	}
 	
 	/**
@@ -161,6 +183,90 @@ public class ParkingImplTest {
 		}		
 	}
 
+	@Test
+	public void testChargeFailUnregisteredVehicle() throws Exception {
+		
+		// Arrange		
+		vehicle = new Vehicle("test", "abc-123", "MOTORCYCLE", 650f);
+		
+		Calendar dateIn = Calendar.getInstance();
+		dateIn.set(2017, Calendar.DECEMBER, 21, 0, 0);
+		
+		Calendar dateOut = Calendar.getInstance();
+		dateIn.set(2017, Calendar.DECEMBER, 21, 10, 0);
+		
+		parking = new ParkingDataBuilder().build();
+		
+		this.bill = new BillDataBuilder()
+				.setParkingId(parking.getId())
+				.setVehicle(vehicle)
+				.setDateIn(dateIn.getTime())
+				.setDateOut(dateOut.getTime())
+				.build();
+		
+		List<Bill> bills = new ArrayList<>();
+		bills.add(this.bill);
+		
+		Map<String, String> fieldValues = new HashMap<>();
+		fieldValues.put("vehicle.licensePlate", vehicle.getLicensePlate());
+		fieldValues.put("state", "true");
+				
+		Mockito.when(iDbNoSql.findOne(parking.getId(), Parking.class)).thenReturn(parking); 
+		Mockito.when(iDbNoSql.findByFieldValues(fieldValues, Bill.class)).thenReturn(bills);
+		Mockito.when(iDbNoSql.saveOrUpdate(bill)).thenReturn(true); 
+		Mockito.when(this.iDateUtilities.getDateStamp()).thenReturn(bill.getDateOut());
+		Mockito.when(this.iDateUtilities.calculateNumMinutesBetweenDates(bill.getDateIn(), bill.getDateOut())).thenReturn(60L*10L);
+		
+		try {
+			// act
+			bill = ParkingImpl.charge(parking.getId(), "null-license");
+		} catch (Exception e) {
+			assertEquals("There is not registered car with this license plate", e.getMessage());
+		}		
+	}
+	
+	@Test
+	public void testChargeFailUnregisteredVehicleType() throws Exception {
+		
+		// Arrange		
+		vehicle = new Vehicle("test", "abc-123", "TRICYCLE", 650f);
+		
+		Calendar dateIn = Calendar.getInstance();
+		dateIn.set(2017, Calendar.DECEMBER, 21, 0, 0);
+		
+		Calendar dateOut = Calendar.getInstance();
+		dateIn.set(2017, Calendar.DECEMBER, 21, 10, 0);
+		
+		parking = new ParkingDataBuilder().build();
+		
+		this.bill = new BillDataBuilder()
+				.setParkingId(parking.getId())
+				.setVehicle(vehicle)
+				.setDateIn(dateIn.getTime())
+				.setDateOut(dateOut.getTime())
+				.build();
+		
+		List<Bill> bills = new ArrayList<>();
+		bills.add(this.bill);
+		
+		Map<String, String> fieldValues = new HashMap<>();
+		fieldValues.put("vehicle.licensePlate", vehicle.getLicensePlate());
+		fieldValues.put("state", "true");
+				
+		Mockito.when(iDbNoSql.findOne(parking.getId(), Parking.class)).thenReturn(parking); 
+		Mockito.when(iDbNoSql.findByFieldValues(fieldValues, Bill.class)).thenReturn(bills);
+		Mockito.when(iDbNoSql.saveOrUpdate(bill)).thenReturn(true); 
+		Mockito.when(this.iDateUtilities.getDateStamp()).thenReturn(bill.getDateOut());
+		Mockito.when(this.iDateUtilities.calculateNumMinutesBetweenDates(bill.getDateIn(), bill.getDateOut())).thenReturn(60L*10L);
+		
+		try {
+			// act
+			bill = ParkingImpl.charge(parking.getId(), vehicle.getLicensePlate());
+		} catch (Exception e) {
+			assertEquals("Prices table not found for vehicle type", e.getMessage());
+		}		
+	}
+	
 	/**
 	 * Calculate motorcycle value test
 	 * whit out agregated values

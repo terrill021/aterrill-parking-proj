@@ -14,6 +14,7 @@ import com.ceiba.bl.parking.models.Bill;
 import com.ceiba.bl.parking.models.Parking;
 import com.ceiba.bl.parking.models.Vehicle;
 import com.ceiba.bl.parking.models.VehicleType;
+import com.ceiba.bl.parking.models.Vehicles;
 import com.ceiba.repository.nosqldb.IDbNoSql;
 import com.ceiba.utilities.IDateUtilities;
 
@@ -74,10 +75,13 @@ public class ParkingImpl implements IParking{
 		}
 		Long numMinutes = iDateUtilities.calculateNumMinutesBetweenDates(bill.getDateIn(), iDateUtilities.getDateStamp()); 
 		Double numHours = Math.ceil(numMinutes / 60.0);
-		Map<String, Float> pricesTable = parking.getTypes().get(type).getPricesTable(); 
-		if (pricesTable == null || pricesTable.isEmpty()) {
+		Map<String, Float> pricesTable;
+		Vehicles vehicle = parking.getTypes().get(type);
+		if (vehicle == null || vehicle.getPricesTable().isEmpty()) {
 			throw new Exception ("Prices table not found for vehicle type");
-		} 
+		}
+		pricesTable = vehicle.getPricesTable(); 
+		 
 		bill.setValue(calculateBillBalue(numHours, pricesTable) + subTotal);
 		bill.setState("false");		
 		parking.getVehicles().remove(bill.getVehicle().getLicensePlate());		
