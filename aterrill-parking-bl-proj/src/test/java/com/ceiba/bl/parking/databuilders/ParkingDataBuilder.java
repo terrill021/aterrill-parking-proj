@@ -67,6 +67,25 @@ public class ParkingDataBuilder {
 		this.bills = bills;
 	}
 
+	
+	public void setVehicles(Set<String> vehicles) {
+		this.vehicles = vehicles;
+	}
+
+	public ParkingDataBuilder setTypes(Map<String, Vehicles> types) {
+		this.types = types;
+		return this;
+	}
+
+	public ParkingDataBuilder setPricesTableCars(Map<String, Float> pricesTableCars) {
+		this.pricesTableCars = pricesTableCars;
+		return this;
+	}
+
+	public void setPricesTableMotorcycles(Map<String, Float> pricesTableMotorcycles) {
+		this.pricesTableMotorcycles = pricesTableMotorcycles;
+	}
+
 	public Parking build() {
 		Parking parking = new Parking(id, name, bills, vehicles, types);
 		return parking;

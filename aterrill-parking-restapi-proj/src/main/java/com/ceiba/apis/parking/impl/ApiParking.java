@@ -1,7 +1,5 @@
 package com.ceiba.apis.parking.impl;
 
-import javax.security.auth.message.callback.PrivateKeyCallback.Request;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,7 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ceiba.apis.parking.model.ApiResponse;
 import com.ceiba.bl.parking.IParking;
-import com.ceiba.bl.parking.databuilders.ParkingDataBuilder;
 import com.ceiba.bl.parking.models.Parking;
 import com.ceiba.bl.parking.models.Vehicle;
 
@@ -93,7 +90,6 @@ public class ApiParking {
 		
 		ApiResponse apiResponse = new ApiResponse();
 		try {
-			parking = new ParkingDataBuilder().build();
 			parking = parkingImpl.registerParking(parking);
 			apiResponse.setError(Boolean.FALSE);	
 			apiResponse.setPayload(parking);

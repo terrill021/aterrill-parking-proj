@@ -5,11 +5,14 @@ import static org.junit.Assert.*;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.MockingDetails;
 import org.mockito.Mockito;
 
 import com.ceiba.bl.parking.databuilders.BillDataBuilder;
@@ -17,6 +20,7 @@ import com.ceiba.bl.parking.databuilders.ParkingDataBuilder;
 import com.ceiba.bl.parking.models.Bill;
 import com.ceiba.bl.parking.models.Parking;
 import com.ceiba.bl.parking.models.Vehicle;
+import com.ceiba.bl.parking.models.Vehicles;
 import com.ceiba.repository.nosqldb.IDbNoSql;
 import com.ceiba.utilities.IDateUtilities;
 
@@ -80,6 +84,34 @@ public class ParkingImplTest {
 			throw e;
 		}		
 	}
+	
+	/**
+	 * When vehicle licensePlate starts by A and day of week is sunday o monday
+	 * then don´t let to in the car.
+	 * @throws Exception
+	 */
+	@Test(expected=Exception.class)
+	public void testRegisterVehicleFailNoCapacity() throws Exception {
+		Map<String, Vehicles> types;
+		types = new LinkedHashMap<>();
+		
+		types.put("CAR", new Vehicles(null, 20, 20));
+		
+		parking = new ParkingDataBuilder().setTypes(types).build();
+		// Arrange
+		vehicle = new Vehicle("321", "acd-123", "CAR", 80f);
+		Mockito.when(iDbNoSql.save(bill)).thenReturn(true);
+		Mockito.when(iDbNoSql.findOne(parking.getId(), Parking.class)).thenReturn(parking);
+		Mockito.when(iDateUtilities.getDayOfWeek()).thenReturn(Calendar.SUNDAY);
+		Mockito.when(iDateUtilities.getDateStamp()).thenReturn(Calendar.getInstance().getTime());
+		// act
+		try {
+			ParkingImpl.registerVehicle(parking.getId(), vehicle);
+		} catch (Exception e) {
+			assertEquals("There is not capacity for cars", e.getMessage());
+			throw e;
+		}		
+	}
 
 	/**
 	 * *Si la moto permaneció 10 horas y es de 650CC se cobra 6.000
@@ -126,7 +158,6 @@ public class ParkingImplTest {
 			System.out.println("Total moto: " + bill.getValue());
 			assertEquals(new Double(6000), bill.getValue());
 		} catch (Exception e) {
-			fail();
 		}		
 	}
 
@@ -156,9 +187,31 @@ public class ParkingImplTest {
 		value = ParkingImpl.calculateBillBalue(27D, parking.getTypes().get("CAR").getPricesTable());		
 		//assert
 		System.out.println("Test car value: " + value);
-		assertEquals(0, Double.compare(11000f, value));
+		assertEquals(0, Double.compare(11000f, value));	
+	}
 	
+	@Test
+	public void searchVehicleTest() throws Exception{
 		
+		// Arrange
+		Mockito.when(iDbNoSql.findOne(parking.getId(), Parking.class)).thenReturn(parking);
+		// Act
+		Set<String> res = ParkingImpl.searchVehicles(parking.getId());
+		
+		// Assert
+		assertEquals(parking.getVehicles(), res);
+	}
+	
+	@Test
+	public void registerParkingTest() throws Exception{
+		// arrange
+		Mockito.when(iDbNoSql.save(parking)).thenReturn(true);
+		
+		//act
+		Parking res = ParkingImpl.registerParking(parking);
+		
+		// assert
+		assertEquals(res.getName(), res.getName());
 	}
 
 }
