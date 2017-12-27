@@ -29,7 +29,7 @@ public class ParkingImpl implements IParking{
 	public Bill registerVehicle(String parkingId, Vehicle vehicle) throws Exception {
 		
 		Parking parking = searchParking(parkingId);		
-		final String type = vehicle.getType();
+		String type = vehicle.getType();
 		if(parking.getTypes().get(type).getCapacity() <= parking.getTypes().get(type).getCountVehicles()) {
 			throw new Exception("There is not capacity for cars");
 		}

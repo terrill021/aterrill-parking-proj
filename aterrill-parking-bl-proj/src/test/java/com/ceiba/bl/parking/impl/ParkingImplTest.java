@@ -142,7 +142,7 @@ public class ParkingImplTest {
 		value = ParkingImpl.calculateBillBalue(10D, parking.getTypes().get("MOTORCYCLE").getPricesTable());		
 		System.out.println("Test value: " + value);
 		// assert
-		assertEquals(Double.compare(4000f, value), 0);		
+		assertEquals(0, Double.compare(4000f, value));		
 	}
 	
 	/**
@@ -156,7 +156,7 @@ public class ParkingImplTest {
 		value = ParkingImpl.calculateBillBalue(27D, parking.getTypes().get("CAR").getPricesTable());		
 		//assert
 		System.out.println("Test car value: " + value);
-		assertEquals(Double.compare(11000f, value), 0);
+		assertEquals(0, Double.compare(11000f, value));
 	
 		
 	}

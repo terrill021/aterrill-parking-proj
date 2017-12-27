@@ -1,6 +1,5 @@
 package com.ceiba.repository.nosqldb.impl;
 
-import java.io.InputStream;
 import java.io.Serializable;
 import java.util.Iterator;
 import java.util.List;
@@ -10,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.gridfs.GridFsOperations;
 import org.springframework.stereotype.Service;
 
 import com.ceiba.repository.nosqldb.IDbNoSql;
@@ -38,44 +36,25 @@ public class MongoDb implements IDbNoSql {
   }
 
   public <T> List<T> getAllObjects(Class<T> type) {
-    try {
-      return (List<T>) mongoTemplate.findAll(type);
-    } catch (Exception e) {
-    	throw e;
-    }
+      return mongoTemplate.findAll(type);
+   
   }
 
   public <T> T findOne(Serializable primaryKey, Class<T> type) {
-    try {
-      return (T) mongoTemplate.findOne(new Query(Criteria.where("_id").is(primaryKey)), type);
-    } catch (Exception e) {
-    	throw e;
-    }
+      return mongoTemplate.findOne(new Query(Criteria.where("_id").is(primaryKey)), type);
+    
   }
 
   public <T> void delete(Serializable primaryKey, Class<T> type) {
-    try {
-      mongoTemplate.remove(new Query(Criteria.where("_id").is(primaryKey)), type);
-    } catch (Exception e) {
-
-    }
+      mongoTemplate.remove(new Query(Criteria.where("_id").is(primaryKey)), type);   
   }
 
-  public <T> boolean exists(Serializable primaryKey, Class<T> type) {
-    try {
+  public <T> boolean exists(Serializable primaryKey, Class<T> type) throws Exception {
       return mongoTemplate.exists(new Query(Criteria.where("_id").is(primaryKey)), type);
-    } catch (Exception e) {
-    	throw e;
-    }
-
   }
 
   public <T> T findOneByFieldValue(String field, String value, Class<T> type) {
-    try {
-      return (T) mongoTemplate.findOne(new Query(Criteria.where(field).is(value)), type);
-    } catch (Exception e) {
-    	throw e;
-    }
+      return mongoTemplate.findOne(new Query(Criteria.where(field).is(value)), type);
   }
 
   public <T> List<T> findByFieldValues(Map<String, String> fields, Class<T> type) {
@@ -95,11 +74,8 @@ public class MongoDb implements IDbNoSql {
       pair = it.next();
       queryTemp = queryTemp.and(pair.getKey()).regex(pair.getValue());
     }
-    try {
       return mongoTemplate.find(new Query(queryTemp), type);
-    } catch (Exception e) {
-    	throw e;
-    }
+    
   }  
 
 }

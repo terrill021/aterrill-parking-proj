@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ceiba.apis.parking.model.ApiResponse;
 import com.ceiba.bl.parking.IParking;
+import com.ceiba.bl.parking.databuilders.ParkingDataBuilder;
 import com.ceiba.bl.parking.models.Parking;
 import com.ceiba.bl.parking.models.Vehicle;
 
@@ -37,7 +38,7 @@ public class ApiParking {
 			return apiResponse;
 		} catch (Exception e) {
 			apiResponse.setError(Boolean.TRUE);
-			apiResponse.setMessage(e.getMessage());
+			apiResponse.setMessage("Cause: " + e.getMessage());
 			return apiResponse;			
 		}
 				
@@ -70,6 +71,7 @@ public class ApiParking {
 		
 		ApiResponse apiResponse = new ApiResponse();
 		try {
+			parking = new ParkingDataBuilder().build();
 			parking = parkingImpl.registerParking(parking);
 			apiResponse.setError(Boolean.FALSE);	
 			apiResponse.setPayload(parking);

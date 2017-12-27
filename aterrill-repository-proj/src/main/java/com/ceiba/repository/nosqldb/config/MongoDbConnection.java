@@ -4,7 +4,6 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.mongodb.MongoDbFactory;
 import org.springframework.data.mongodb.config.AbstractMongoConfiguration;
@@ -20,9 +19,7 @@ import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
 
 public abstract class MongoDbConnection extends AbstractMongoConfiguration {
-  
-  private final String DEFAULT_MONGO_DATABASE = "admin";
-  
+    
   public abstract IDbNoSql iDbNoSql();
   
   public abstract DataSourceNoSql getDataSourceNoSql();
@@ -60,7 +57,7 @@ public abstract class MongoDbConnection extends AbstractMongoConfiguration {
 
   private List<MongoCredential> mongoCredentials() {
 
-    List<MongoCredential> credentials = new ArrayList<MongoCredential>();
+    List<MongoCredential> credentials = new ArrayList<>();
     String user = getDataSourceNoSql().getUser();
     String password = getDataSourceNoSql().getPassword();
     if ((user != null && user != "") && (password != null && password != "")) {

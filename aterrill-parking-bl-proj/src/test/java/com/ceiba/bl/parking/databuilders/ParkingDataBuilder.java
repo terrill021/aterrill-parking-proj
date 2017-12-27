@@ -24,8 +24,8 @@ public class ParkingDataBuilder {
 	
 	
 	public ParkingDataBuilder() {
-		this.id = "id_parking";
-		this.name = "Parking-test";
+		this.id = "21";
+		this.name = "Parking-aterrill";
 		bills = new ArrayList<>();
 		types = new LinkedHashMap<>();
 		pricesTableCars = new LinkedHashMap<>();

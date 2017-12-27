@@ -17,16 +17,16 @@ public interface IDbNoSql {
   public <T> void delete(Serializable primaryKey, Class<T> entityClass);
 
 
-  public <T> boolean exists(Serializable primaryKey, Class<T> entityClass);
+  public <T> boolean exists(Serializable primaryKey, Class<T> entityClass) throws Exception;
 
 
-  public <T> List<T> getAllObjects(Class<T> entityClass);
-
-  
-  public <T> T findOneByFieldValue(String field, String value, Class<T> entityClass);
+  public <T> List<T> getAllObjects(Class<T> entityClass) throws Exception;
 
   
-  public <T> List<T> findByFieldValues(Map<String, String> fields, Class<T> entityClass);
+  public <T> T findOneByFieldValue(String field, String value, Class<T> entityClass) throws Exception;
+
+  
+  public <T> List<T> findByFieldValues(Map<String, String> fields, Class<T> entityClass) throws Exception;
 
   public <T> Boolean saveOrUpdate(T entity) throws Exception;
 }
