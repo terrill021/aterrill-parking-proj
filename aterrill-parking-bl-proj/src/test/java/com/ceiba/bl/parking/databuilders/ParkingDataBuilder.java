@@ -1,34 +1,45 @@
 package com.ceiba.bl.parking.databuilders;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import com.ceiba.bl.parking.models.Bill;
 import com.ceiba.bl.parking.models.Parking;
-import com.ceiba.bl.parking.models.PriceTable;
+import com.ceiba.bl.parking.models.Vehicles;
 
 public class ParkingDataBuilder {
 
 	private String id;
 	private String name;
-	private int carsCapacity;
-	private int motorcyclesCapacity;
-	private PriceTable priceTable;
 	private List<Bill> bills;
-	private Set<String> carsPlate;
-	private Set <String> motorcyclesPalte;
+	private Set<String> vehicles;
+	// key - vehicleType / value = data
+	private Map<String, Vehicles> types;
+	private Map <String, Float> pricesTableCars;
+	private Map <String, Float> pricesTableMotorcycles;
+	
 	
 	public ParkingDataBuilder() {
 		this.id = "id_parking";
 		this.name = "Parking-test";
-		this.carsCapacity = 20;
-		this.motorcyclesCapacity = 10;
-		this.priceTable = new PriceTableDataBuilder().build();
 		bills = new ArrayList<>();
-		carsPlate = new LinkedHashSet<>();
-		motorcyclesPalte = new LinkedHashSet<>();
+		types = new LinkedHashMap<>();
+		pricesTableCars = new LinkedHashMap<>();
+		pricesTableMotorcycles = new LinkedHashMap<>();
+		vehicles = new LinkedHashSet<>();
+		
+		pricesTableCars.put("HOUR", 1000f);
+		pricesTableCars.put("DAY", 8000f);
+
+		pricesTableMotorcycles.put("HOUR", 500f);
+		pricesTableMotorcycles.put("DAY", 4000f);
+
+		types.put("CAR", new Vehicles(pricesTableCars, 0, 20));
+		types.put("MOTORCYCLE", new Vehicles(pricesTableMotorcycles, 0, 10));
 	}
 	
 	public String getId() {
@@ -47,29 +58,6 @@ public class ParkingDataBuilder {
 		this.name = name;
 	}
 
-	public int getCarsCapacity() {
-		return carsCapacity;
-	}
-
-	public void setCarsCapacity(int carsCapacity) {
-		this.carsCapacity = carsCapacity;
-	}
-
-	public int getMotorcyclesCapacity() {
-		return motorcyclesCapacity;
-	}
-
-	public void setMotorcyclesCapacity(int motorcyclesCapacity) {
-		this.motorcyclesCapacity = motorcyclesCapacity;
-	}
-
-	public PriceTable getPriceTable() {
-		return priceTable;
-	}
-
-	public void setPriceTable(PriceTable priceTable) {
-		this.priceTable = priceTable;
-	}
 
 	public List<Bill> getBills() {
 		return bills;
@@ -80,7 +68,7 @@ public class ParkingDataBuilder {
 	}
 
 	public Parking build() {
-		Parking parking = new Parking(id, name, carsCapacity, motorcyclesCapacity, priceTable, bills, carsPlate, this.motorcyclesPalte);
+		Parking parking = new Parking(id, name, bills, vehicles, types);
 		return parking;
 	}
 }

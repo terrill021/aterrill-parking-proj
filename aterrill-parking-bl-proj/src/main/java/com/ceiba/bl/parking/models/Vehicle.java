@@ -1,19 +1,8 @@
 package com.ceiba.bl.parking.models;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
-
-/**
- * 
- * Vehiculo con motor
- * @author alejandro.terrill
- *
- */
-
 public class Vehicle {
 
-	private String id;
-	
+	private String id;	
 	private String licensePlate;
 	private String type;
 	private Float displacement;

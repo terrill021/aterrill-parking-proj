@@ -29,11 +29,9 @@ public class ParkingImpl implements IParking{
 	public Bill registerVehicle(String parkingId, Vehicle vehicle) throws Exception {
 		
 		Parking parking = searchParking(parkingId);		
-		if(parking.getCarsPlates().size() >= parking.getCarsCapacity()) {
+		final String type = vehicle.getType();
+		if(parking.getTypes().get(type).getCapacity() <= parking.getTypes().get(type).getCountVehicles()) {
 			throw new Exception("There is not capacity for cars");
-		}
-		if (parking.getMotorcyclesPlate().size() >= parking.getMotorcyclesCapacity()) {
-			throw new Exception("There is not capacity for motorcycles");
 		}
 		if (vehicle.getLicensePlate().substring(0, 1).equalsIgnoreCase("a")) {
 			if(iDateUtilities.getDayOfWeek() == Calendar.SUNDAY || iDateUtilities.getDayOfWeek() == Calendar.MONDAY) {
@@ -46,18 +44,9 @@ public class ParkingImpl implements IParking{
 		bill.setDateIn(iDateUtilities.getDateStamp());
 		bill.setParkingId(parking.getId());
 		boolean operationResult = false;
-		switch (vehicle.getType()) {
-		case "MOTORCYCLE":
-			operationResult = parking.getMotorcyclesPlate().add(vehicle.getLicensePlate());
-		break;
-		case "CAR":
-			operationResult = parking.getMotorcyclesPlate().add(vehicle.getLicensePlate());
-		break;
-		default:
-			throw new Exception("Vehicle type not found");
-		}
+		operationResult = parking.getVehicles().add(vehicle.getLicensePlate());
 		if (!operationResult) {
-			throw new Exception("There is already an vehicle whit this license pplate");
+			throw new Exception("There is already an vehicle whit this license plate");
 		}
 		iDbNoSql.save(bill);
 		parking.getBills().add(bill);		
@@ -76,30 +65,21 @@ public class ParkingImpl implements IParking{
 			throw new Exception("There is not registered car with this license plate");
 		}
 		Bill bill = bills.get(0);
+		final String type = bill.getVehicle().getType();
 		Double subTotal = 0d;
-		if (bill.getVehicle().getType().equalsIgnoreCase(VehicleType.MOTORCYCLE.getType()) &&
+		if (type.equalsIgnoreCase(VehicleType.MOTORCYCLE.getType()) &&
 				bill.getVehicle().getDisplacement() > 500) {
 			subTotal += 2000;
 		}
 		Long numMinutes = iDateUtilities.calculateNumMinutesBetweenDates(bill.getDateIn(), iDateUtilities.getDateStamp()); 
 		Double numHours = Math.ceil(numMinutes / 60.0);
-		Map<String, Float> pricesTable = parking.getPriceTable().getPricesTable().get(bill.getVehicle().getType()); 
+		Map<String, Float> pricesTable = parking.getTypes().get(type).getPricesTable(); 
 		if (pricesTable == null || pricesTable.isEmpty()) {
 			throw new Exception ("Prices table not found for vehicle type");
 		} 
 		bill.setValue(calculateBillBalue(numHours, pricesTable) + subTotal);
-		bill.setState("false");
-		
-		switch (bill.getVehicle().getType()) {
-		case "MOTORCYCLE":
-			parking.getMotorcyclesPlate().remove(bill.getVehicle().getLicensePlate());
-		break;
-		case "CAR":
-			parking.getMotorcyclesPlate().add(bill.getVehicle().getLicensePlate());
-		break;
-		default:
-			throw new Exception("Vehicle type not found");
-		}		
+		bill.setState("false");		
+		parking.getVehicles().remove(bill.getVehicle().getLicensePlate());		
 		iDbNoSql.saveOrUpdate(parking);
 		iDbNoSql.saveOrUpdate(bill);		
 		return bill;

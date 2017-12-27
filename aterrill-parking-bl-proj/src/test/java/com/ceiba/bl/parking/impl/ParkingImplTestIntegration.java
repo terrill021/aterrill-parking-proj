@@ -99,17 +99,16 @@ public class ParkingImplTestIntegration {
 	public void testRegisterVehicleFailByDate() throws Exception {
 		
 		// Arrange
-		vehicle = new Vehicle("321", "bcd-123", "car", 80f);
+		vehicle = new Vehicle("321", "acd-123", "CAR", 80f);
 		//Mockito.when(iDbNoSql.save(bill)).thenReturn(true);
 		//Mockito.when(iDbNoSql.findOne(parking.getId(), Parking.class)).thenReturn(parking);
 		Mockito.when(iDateUtilities.getDayOfWeek()).thenReturn(Calendar.SUNDAY);
 		Mockito.when(iDateUtilities.getDateStamp()).thenReturn(Calendar.getInstance().getTime());
-		vehicle.setLicensePlate("ABC-123");
 		iDbNoSql.saveOrUpdate(parking);
 	
 		// act
 		try {
-			Bill bill = ParkingImpl.registerVehicle(parking.getId(), vehicle);			
+			ParkingImpl.registerVehicle(parking.getId(), vehicle);			
 			//assert
 			Assert.fail();
 		} catch (Exception e) {
