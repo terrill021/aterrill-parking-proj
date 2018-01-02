@@ -11,13 +11,13 @@ public class Parking {
 	private List<Bill> bills;
 	private Set<String> vehicles;
 	// key - vehicleType / value = data
-	private Map<String, Vehicles> types;
+	private Map<String, VehicleType> types;
 
 	public Parking() {
 		
 	}
 	
-	public Parking(String id, String name, List<Bill> bills, Set<String> vehicles, Map<String, Vehicles> types) {
+	public Parking(String id, String name, List<Bill> bills, Set<String> vehicles, Map<String, VehicleType> types) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -26,11 +26,11 @@ public class Parking {
 		this.types = types;
 	}
 
-	public Map<String, Vehicles> getTypes() {
+	public Map<String, VehicleType> getTypes() {
 		return types;
 	}
 
-	public void setTypes(Map<String, Vehicles> types) {
+	public void setTypes(Map<String, VehicleType> types) {
 		this.types = types;
 	}
 

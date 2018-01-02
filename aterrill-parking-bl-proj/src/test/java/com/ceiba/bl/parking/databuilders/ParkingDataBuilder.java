@@ -9,7 +9,7 @@ import java.util.Set;
 
 import com.ceiba.bl.parking.models.Bill;
 import com.ceiba.bl.parking.models.Parking;
-import com.ceiba.bl.parking.models.Vehicles;
+import com.ceiba.bl.parking.models.VehicleType;
 
 public class ParkingDataBuilder {
 
@@ -18,7 +18,7 @@ public class ParkingDataBuilder {
 	private List<Bill> bills;
 	private Set<String> vehicles;
 	// key - vehicleType / value = data
-	private Map<String, Vehicles> types;
+	private Map<String, VehicleType> types;
 	private Map <String, Float> pricesTableCars;
 	private Map <String, Float> pricesTableMotorcycles;
 	
@@ -38,8 +38,8 @@ public class ParkingDataBuilder {
 		pricesTableMotorcycles.put("HOUR", 500f);
 		pricesTableMotorcycles.put("DAY", 4000f);
 
-		types.put("CAR", new Vehicles(pricesTableCars, 0, 20));
-		types.put("MOTORCYCLE", new Vehicles(pricesTableMotorcycles, 0, 10));
+		types.put("CAR", new VehicleType(pricesTableCars, 0, 20));
+		types.put("MOTORCYCLE", new VehicleType(pricesTableMotorcycles, 0, 10));
 	}
 	
 	public String getId() {
@@ -72,7 +72,7 @@ public class ParkingDataBuilder {
 		this.vehicles = vehicles;
 	}
 
-	public ParkingDataBuilder setTypes(Map<String, Vehicles> types) {
+	public ParkingDataBuilder setTypes(Map<String, VehicleType> types) {
 		this.types = types;
 		return this;
 	}

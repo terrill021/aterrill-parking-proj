@@ -10,14 +10,9 @@ import java.util.Map;
 
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 
-import com.ceiba.bl.parking.config.RepositoryConfig;
 import com.ceiba.bl.parking.databuilders.BillDataBuilder;
 import com.ceiba.bl.parking.databuilders.ParkingDataBuilder;
 import com.ceiba.bl.parking.models.Bill;

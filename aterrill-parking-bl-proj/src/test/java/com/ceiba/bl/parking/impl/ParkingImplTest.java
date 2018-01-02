@@ -10,10 +10,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.MockingDetails;
 import org.mockito.Mockito;
 
 import com.ceiba.bl.parking.databuilders.BillDataBuilder;
@@ -21,7 +19,7 @@ import com.ceiba.bl.parking.databuilders.ParkingDataBuilder;
 import com.ceiba.bl.parking.models.Bill;
 import com.ceiba.bl.parking.models.Parking;
 import com.ceiba.bl.parking.models.Vehicle;
-import com.ceiba.bl.parking.models.Vehicles;
+import com.ceiba.bl.parking.models.VehicleType;
 import com.ceiba.repository.nosqldb.IDbNoSql;
 import com.ceiba.utilities.IDateUtilities;
 
@@ -107,17 +105,13 @@ public class ParkingImplTest {
 		}		
 	}
 	
-	/**
-	 * When vehicle licensePlate starts by A and day of week is sunday o monday
-	 * then don´t let to in the car.
-	 * @throws Exception
-	 */
+
 	@Test(expected=Exception.class)
-	public void testRegisterVehicleFailNoCapacity() throws Exception {
-		Map<String, Vehicles> types;
+	public void testRegisterCarFailNoCapacity() throws Exception {
+		Map<String, VehicleType> types;
 		types = new LinkedHashMap<>();
 		
-		types.put("CAR", new Vehicles(null, 20, 20));
+		types.put("CAR", new VehicleType(null, 20, 20));
 		
 		parking = new ParkingDataBuilder().setTypes(types).build();
 		// Arrange

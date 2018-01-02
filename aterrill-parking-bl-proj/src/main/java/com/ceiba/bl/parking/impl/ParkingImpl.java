@@ -14,7 +14,6 @@ import com.ceiba.bl.parking.models.Bill;
 import com.ceiba.bl.parking.models.Parking;
 import com.ceiba.bl.parking.models.Vehicle;
 import com.ceiba.bl.parking.models.VehicleType;
-import com.ceiba.bl.parking.models.Vehicles;
 import com.ceiba.repository.nosqldb.IDbNoSql;
 import com.ceiba.utilities.IDateUtilities;
 
@@ -35,10 +34,10 @@ public class ParkingImpl implements IParking{
 		if(parking.getTypes().get(type).getCapacity() <= parking.getTypes().get(type).getCountVehicles()) {
 			throw new Exception("There is not capacity for cars");
 		}
-		if (vehicle.getLicensePlate().substring(0, 1).equalsIgnoreCase("a")) {
-			if(iDateUtilities.getDayOfWeek() == Calendar.SUNDAY || iDateUtilities.getDayOfWeek() == Calendar.MONDAY) {
+		if (vehicle.getLicensePlate().substring(0, 1).equalsIgnoreCase("a")
+				&& iDateUtilities.getDayOfWeek() == Calendar.SUNDAY 
+				|| iDateUtilities.getDayOfWeek() == Calendar.MONDAY) {
 				throw new Exception("You are not authorized to in on sundays or mondays");
-			}
 		}
 		Bill bill = new Bill();
 		bill.setVehicle(vehicle);
@@ -69,14 +68,14 @@ public class ParkingImpl implements IParking{
 		Bill bill = bills.get(0);
 		final String type = bill.getVehicle().getType();
 		Double subTotal = 0d;
-		if (type.equalsIgnoreCase(VehicleType.MOTORCYCLE.getType()) &&
+		if (type.equalsIgnoreCase("MOTORCYCLE") &&
 				bill.getVehicle().getDisplacement() > 500) {
 			subTotal += 2000;
 		}
 		Long numMinutes = iDateUtilities.calculateNumMinutesBetweenDates(bill.getDateIn(), iDateUtilities.getDateStamp()); 
 		Double numHours = Math.ceil(numMinutes / 60.0);
 		Map<String, Float> pricesTable;
-		Vehicles vehicle = parking.getTypes().get(type);
+		VehicleType vehicle = parking.getTypes().get(type);
 		if (vehicle == null || vehicle.getPricesTable().isEmpty()) {
 			throw new Exception ("Prices table not found for vehicle type");
 		}
@@ -131,19 +130,9 @@ public class ParkingImpl implements IParking{
 		return value;
 	}
 
-	public IDbNoSql getiDbNoSql() {
-		return iDbNoSql;
-	}
-
 	public void setiDbNoSql(IDbNoSql iDbNoSql) {
 		this.iDbNoSql = iDbNoSql;
 	}
-
-
-	public IDateUtilities getiDateUtilities() {
-		return iDateUtilities;
-	}
-
 
 	public void setiDateUtilities(IDateUtilities iDateUtilities) {
 		this.iDateUtilities = iDateUtilities;

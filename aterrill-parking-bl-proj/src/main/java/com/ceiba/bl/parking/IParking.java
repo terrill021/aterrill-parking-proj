@@ -1,6 +1,5 @@
 package com.ceiba.bl.parking;
 
-import java.util.List;
 import java.util.Set;
 
 import com.ceiba.bl.parking.models.Bill;
